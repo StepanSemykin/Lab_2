@@ -1,14 +1,13 @@
 import csv
 import os
 
-def write_csv(directory_obj : str, start : str, name: int):
-    """
-    Writes the absolute and relative path of the image to csv.
+def write_csv(directory_obj : str, start : str, name: str):
+    """Writes the absolute and relative path of the image to csv.
 
     Args:
         directory_obj (str): full path to the file
-        start (str): intermediate file path 
-        name (int): name of the image class
+        start (str): intermediate file path
+        name (str): name of the image class
     """
     file = "patch.csv"
     f = open(file, "a", encoding = "utf-8", newline = "")
@@ -18,9 +17,7 @@ def write_csv(directory_obj : str, start : str, name: int):
     r_directory_obj = os.path.relpath(directory_obj, start)
     
     for i in data:
-        f_writer.writerow({"Absolut_path": directory_obj + "\\" + i, "Relative_patch":  r_directory_obj + "\\" + i, "Class": name})
-        
-       
+        f_writer.writerow({"Absolut_path": directory_obj + "\\" + i, "Relative_patch":  r_directory_obj + "\\" + i, "Class": name})    
     
 def main():
     """Separates code blocks"""
