@@ -2,6 +2,11 @@ import csv
 
 class Iterator:
     def __init__(self, directory: str, name: str):
+        """Сonstructor of the class object, return NONE.
+        Args:
+            directory (str): full path to the folder.
+            name (str): object classs.
+        """
         self.directory = directory
         self.name = name
         self.count = -1
