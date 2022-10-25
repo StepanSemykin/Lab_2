@@ -22,22 +22,22 @@ def copy_dataset(directory_obj: str, c_directory_obj: str, name: str):
     for i in tqdm.tqdm(data):
         shutil.copy(directory_obj + "\\" + i, c_directory_obj + "\\"+ name + "_" + i)
    
-def write_csv_copy(directory_obj: str, start: str, name: str):
+def write_csv_copy(directory_obj: str, c_directory_obj: str, start: str, name: str):
     """Writes the absolute and relative path of the image to csv, return NONE.
     Args:
-        directory_obj (str): full path to the folder.
-        start (str): intermediate folder path.
+        directory_obj (str): the path of the source folder.
+        c_directory_obj (str): folder path to copy.
+        start (str): intermediate path to copy.
         name (str): object class.
     """
-    file = "copy_patch.csv"
-    f = open(file, "a", encoding = "utf-8", newline = "")
-    f_writer = csv.DictWriter(f, fieldnames = ["Absolut_path", "Relative_patch", "Class"], delimiter = "|")
-    
     data = os.listdir(directory_obj)
-    r_directory_obj = os.path.relpath(directory_obj, start)
+    r_directory_obj = os.path.relpath(c_directory_obj, start)
     
-    for i in data:
-        f_writer.writerow({"Absolut_path": directory_obj + "\\" + i, "Relative_patch":  r_directory_obj + "\\" + i, "Class": name})   
+    file = "copy_patch.csv"
+    with open(file, "a", encoding = "utf-8", newline = "") as f:
+        f_writer = csv.DictWriter(f, fieldnames = ["Absolut_path", "Relative_patch", "Class"], delimiter = "|")
+        for i in data:
+            f_writer.writerow({"Absolut_path": c_directory_obj + "\\" + name + "_" + i, "Relative_patch":  r_directory_obj + "\\" + name + "_" + i, "Class": name})   
 
 def main():
     """Separates code blocks."""
@@ -49,10 +49,10 @@ def main():
     directory(c_directory)
     
     copy_dataset(directory_rose, c_directory, "rose")
-    write_csv_copy(c_directory, start, "rose")
+    write_csv_copy(directory_rose, c_directory, start, "rose")
     
     copy_dataset(directory_tulip, c_directory, "tulip")
-    write_csv_copy(c_directory, start, "tulip")
+    write_csv_copy(directory_tulip, c_directory, start, "tulip")
     
 if __name__ == "__main__":
 	main()  
