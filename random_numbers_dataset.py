@@ -3,7 +3,7 @@ import csv
 import os
 import shutil
 import tqdm
-from random import randint
+import random 
 
 def directory(c_directory: str):
     """Сreates a folder at the specified path, return NONE.
@@ -20,11 +20,16 @@ def copy_dataset(directory_obj: str, c_directory_obj: str):
         c_directory_obj (str): folder path to copy.
     """
     data = os.listdir(directory_obj)
+    r_list = list(range(1, 10001))
+    random.shuffle(r_list)
+    j = 0
     for i in tqdm.tqdm(data):
-        so = str(f"{randint(1, 10001):05}")
+        # so = str(f"{randint(1, 10001):05}")
+        so = str(r_list[j])
         shutil.copy(directory_obj + "\\" + i, c_directory_obj + "\\" + so + '.jpeg')
+        j += 1
    
-def write_csv_copy(directory_obj: str, start: str, name: str):
+def write_csv_copy(directory_obj: str, c_directory_obj: str, start: str, name: str):
     """Writes the absolute and relative path of the image to csv, return NONE.
     Args:
         directory_obj (str): full path to the folder.
@@ -36,10 +41,10 @@ def write_csv_copy(directory_obj: str, start: str, name: str):
     f_writer = csv.DictWriter(f, fieldnames = ["Absolut_path", "Relative_patch", "Class"], delimiter = "|")
     
     data = os.listdir(directory_obj)
-    r_directory_obj = os.path.relpath(directory_obj, start)
+    r_directory_obj = os.path.relpath(c_directory_obj, start)
     
     for i in data:
-        f_writer.writerow({"Absolut_path": directory_obj + "\\" + i, "Relative_patch":  r_directory_obj + "\\" + i, "Class": name})   
+        f_writer.writerow({"Absolut_path": c_directory_obj + "\\" + i, "Relative_patch":  r_directory_obj + "\\" + i, "Class": name})   
 
 def main():
     """Separates code blocks."""
@@ -51,10 +56,10 @@ def main():
     directory(c_directory)
     
     copy_dataset(directory_rose, c_directory)
-    write_csv_copy(c_directory, start, "rose")
+    write_csv_copy(directory_rose, c_directory, start, "rose")
     
     copy_dataset(directory_tulip, c_directory)
-    write_csv_copy(c_directory, start, "tulip")
+    write_csv_copy(directory_tulip, c_directory, start, "tulip")
     
 
 if __name__ == "__main__":
